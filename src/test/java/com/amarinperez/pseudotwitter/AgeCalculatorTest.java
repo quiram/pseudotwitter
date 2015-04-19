@@ -1,8 +1,8 @@
 package com.amarinperez.pseudotwitter;
 
-import java.time.LocalDateTime;
+import static org.junit.Assert.assertEquals;
 
-import static org.junit.Assert.*;
+import java.time.LocalDateTime;
 
 import org.junit.Before;
 import org.junit.Test;
