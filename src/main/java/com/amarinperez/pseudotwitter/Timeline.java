@@ -1,11 +1,12 @@
 package com.amarinperez.pseudotwitter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Timeline {
 
-	List<String> messages = new ArrayList<String>();
+	ArrayList<String> messages = new ArrayList<String>();
 	
 	public void add(String message) {
 		messages.add(message);
@@ -13,6 +14,9 @@ public class Timeline {
 	
 	public String toString()
 	{
-		return String.join(System.lineSeparator(), messages.toArray(new String[0]));
+		@SuppressWarnings("unchecked")
+		List<String> messagesInReverse = (List<String>) messages.clone();
+		Collections.reverse(messagesInReverse);
+		return String.join(System.lineSeparator(), messagesInReverse.toArray(new String[0]));
 	}
 }
