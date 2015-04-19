@@ -55,7 +55,6 @@ public class PseudoTwitterTest {
 	}
 
 	@Test
-	@Ignore
 	public void wallIncludesActivityFromFollowees() {
 		String john = "John";
 		String johnMessage = "I am a guy";

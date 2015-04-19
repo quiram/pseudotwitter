@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class PseudoTwitter {
@@ -16,7 +17,7 @@ public class PseudoTwitter {
 
 	public String getTimeline(String username) {
 		Predicate<Post> filterCriteria = p -> p.getUsername().equalsIgnoreCase(username);
-		String timeline = getTimelineForPostsMatching(filterCriteria);
+		String timeline = getTimelineForPostsMatching(filterCriteria, Post::getMessage);
 		return timeline;
 	}
 
@@ -39,13 +40,13 @@ public class PseudoTwitter {
 		usersToConsider.addAll(followees.get(username));
 
 		Predicate<Post> filterCriteria = p -> usersToConsider.contains(p.getUsername().toLowerCase());
-		String wall = getTimelineForPostsMatching(filterCriteria);
+		Function<Post, String> mapper = p -> p.getUsername() + " - " + p.getMessage();
+		String wall = getTimelineForPostsMatching(filterCriteria, mapper);
 
 		return wall;
 	}
 
-	private String getTimelineForPostsMatching(Predicate<Post> filterCriteria) {
-		return posts.stream().filter(filterCriteria).map(Post::getMessage)
-				.reduce((a, b) -> a + System.lineSeparator() + b).get();
+	private String getTimelineForPostsMatching(Predicate<Post> filterCriteria, Function<Post, String> mapper) {
+		return posts.stream().filter(filterCriteria).map(mapper).reduce((a, b) -> a + System.lineSeparator() + b).get();
 	}
 }
