@@ -2,41 +2,50 @@ package com.amarinperez.pseudotwitter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Predicate;
 
 public class PseudoTwitter {
-
-	private Collection<User> users = new ArrayList<User>();
+	private Collection<Post> posts = new ArrayList<Post>();
+	private Map<String, Collection<String>> followees = new HashMap<String, Collection<String>>();
 
 	public void post(String username, String message) {
-		User user = findUser(username);
-
-		if (user == null) {
-			user = new User(username);
-			users.add(user);
-		}
-
-		user.post(message);
+		posts.add(new Post(username, message));
 	}
 
 	public String getTimeline(String username) {
-		return findUser(username).toString();
-	}
-
-	protected User findUser(String username) {
-		return users.stream().filter(u -> u.getUsername().equalsIgnoreCase(username)).findFirst().orElse(null);
+		Predicate<Post> filterCriteria = p -> p.getUsername().equalsIgnoreCase(username);
+		String timeline = getTimelineForPostsMatching(filterCriteria);
+		return timeline;
 	}
 
 	public void follow(String follower, String followee) {
-		findUser(follower).follows(findUser(followee));
+		follower = follower.toLowerCase();
+		followee = followee.toLowerCase();
+		Collection<String> followeesByUser = followees.get(follower);
+		if (followeesByUser == null) {
+			followeesByUser = new ArrayList<String>();
+			followees.put(follower, followeesByUser);
+		}
+
+		followeesByUser.add(followee);
 	}
 
 	public String wall(String username) {
-		User user = findUser(username);
-		Timeline wall = user.getTimeline();
-		for (User followee : user.getFollowees()) {
-			wall = wall.mergeWith(followee.getTimeline());
-		}
-		
-		return wall.toString();
+		username = username.toLowerCase();
+		Collection<String> usersToConsider = new ArrayList<String>();
+		usersToConsider.add(username);
+		usersToConsider.addAll(followees.get(username));
+
+		Predicate<Post> filterCriteria = p -> usersToConsider.contains(p.getUsername().toLowerCase());
+		String wall = getTimelineForPostsMatching(filterCriteria);
+
+		return wall;
+	}
+
+	private String getTimelineForPostsMatching(Predicate<Post> filterCriteria) {
+		return posts.stream().filter(filterCriteria).map(Post::getMessage)
+				.reduce((a, b) -> a + System.lineSeparator() + b).get();
 	}
 }

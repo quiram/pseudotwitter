@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class PseudoTwitterTest {
@@ -54,9 +55,10 @@ public class PseudoTwitterTest {
 	}
 
 	@Test
+	@Ignore
 	public void wallIncludesActivityFromFollowees() {
 		String john = "John";
-		String johnMessage = "I am John";
+		String johnMessage = "I am a guy";
 		String charlie = "Charlie";
 		String charlieMessage = "Charlie reporting for duty.";
 		twitter.post(john, johnMessage);
@@ -64,6 +66,7 @@ public class PseudoTwitterTest {
 		twitter.follow(john, charlie);
 		String wall = twitter.wall(john);
 		assertThat(wall, containsString(johnMessage));
+		assertThat(wall, containsString(john));
 		assertThat(wall, containsString(charlieMessage));
 	}
 }
