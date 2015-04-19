@@ -1,8 +1,12 @@
 package com.amarinperez.pseudotwitter;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
+
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,16 +59,18 @@ public class PseudoTwitterTest {
 	}
 
 	@Test
-	public void wallIncludesActivityFromFollowees() {
+	public void wallIncludesActivityFromFollowees() throws InterruptedException {
 		String john = "John";
 		String johnMessage = "I am a guy";
 		String charlie = "Charlie";
 		String charlieMessage = "Charlie reporting for duty.";
-		twitter.post(john, johnMessage);
 		twitter.post(charlie, charlieMessage);
+		TimeUnit.MILLISECONDS.sleep(1); // Need to add a slight delay between posts to allow ordering
+		twitter.post(john, johnMessage);
 		twitter.follow(john, charlie);
 		String wall = twitter.wall(john);
-		assertThat(wall, containsString(johnMessage));
+		List<String> expectedMessages = Arrays.asList(new String[] {johnMessage, charlieMessage} );
+		assertThat(wall, stringContainsInOrder(expectedMessages));
 		assertThat(wall, containsString(john));
 		assertThat(wall, containsString(charlieMessage));
 		assertThat(wall, containsString("ago"));

@@ -4,7 +4,7 @@ import static java.time.LocalDateTime.now;
 
 import java.time.LocalDateTime;
 
-public class Post {
+public class Post implements Comparable<Post> {
 	private String message;
 	private String username;
 	private LocalDateTime timestamp;
@@ -34,5 +34,10 @@ public class Post {
 	public String getAge() {
 		AgeCalculator calc = new AgeCalculator();
 		return calc.getAge(timestamp, now());
+	}
+
+	@Override
+	public int compareTo(Post other) {
+		return other.timestamp.compareTo(this.timestamp);
 	}
 }

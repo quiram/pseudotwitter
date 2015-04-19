@@ -52,6 +52,7 @@ public class PseudoTwitter {
 	}
 
 	private String getTimelineForPostsMatching(Predicate<Post> filterCriteria, Function<Post, String> mapper) {
-		return posts.stream().filter(filterCriteria).map(mapper).reduce((a, b) -> a + System.lineSeparator() + b).get();
+		return posts.stream().filter(filterCriteria).sorted().map(mapper)
+				.reduce((a, b) -> a + System.lineSeparator() + b).get();
 	}
 }
