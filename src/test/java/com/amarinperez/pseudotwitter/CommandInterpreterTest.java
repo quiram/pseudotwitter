@@ -43,4 +43,27 @@ public class CommandInterpreterTest {
 		command.execute();
 		verify(twitter).post(username, message);
 	}
+	
+	@Test
+	public void produceFollowCommand()
+	{
+		String follower = "Bob";
+		String followee = "Mike";
+		String line = follower + " follows " + followee;
+		Command command = interpreter.interpret(line);
+		assertThat(command, instanceOf(FollowComand.class));
+		command.execute();
+		verify(twitter).follow(follower, followee);
+	}
+	
+	@Test
+	public void produceWallCommand()
+	{
+		String username = "Carl";
+		String line = username + " wall";
+		Command command = interpreter.interpret(line);
+		assertThat(command, instanceOf(WallComand.class));
+		command.execute();
+		verify(twitter).wall(username);
+	}
 }

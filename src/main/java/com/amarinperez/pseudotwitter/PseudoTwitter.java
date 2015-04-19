@@ -25,4 +25,18 @@ public class PseudoTwitter {
 	protected User findUser(String username) {
 		return users.stream().filter(u -> u.getUsername().equalsIgnoreCase(username)).findFirst().orElse(null);
 	}
+
+	public void follow(String follower, String followee) {
+		findUser(follower).follows(findUser(followee));
+	}
+
+	public String wall(String username) {
+		User user = findUser(username);
+		Timeline wall = user.getTimeline();
+		for (User followee : user.getFollowees()) {
+			wall = wall.mergeWith(followee.getTimeline());
+		}
+		
+		return wall.toString();
+	}
 }

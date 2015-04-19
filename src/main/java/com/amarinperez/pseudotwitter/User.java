@@ -33,5 +33,9 @@ public class User {
 	public void follows(User carmen) {
 		followees.add(carmen);
 	}
-
+	
+	public Timeline getTimeline()
+	{
+		return timeline;
+	}
 }

@@ -15,5 +15,4 @@ public class PostCommand implements Command {
 		twitter.post(username, message);
 		return "posted!";
 	}
-
 }

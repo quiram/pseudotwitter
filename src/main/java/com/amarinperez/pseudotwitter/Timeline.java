@@ -6,17 +6,27 @@ import java.util.List;
 
 public class Timeline {
 
-	ArrayList<String> messages = new ArrayList<String>();
-	
+	ArrayList<Post> messages = new ArrayList<Post>();
+
 	public void add(String message) {
-		messages.add(message);
+		messages.add(new Post(message));
 	}
-	
-	public String toString()
-	{
+
+	public String toString() {
 		@SuppressWarnings("unchecked")
-		List<String> messagesInReverse = (List<String>) messages.clone();
+		List<Post> messagesInReverse = (List<Post>) messages.clone();
 		Collections.reverse(messagesInReverse);
-		return String.join(System.lineSeparator(), messagesInReverse.toArray(new String[0]));
+		String timeline = messagesInReverse.stream().map(Post::toString)
+				.reduce((a, b) -> a + System.lineSeparator() + b).get();
+
+		return timeline;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Timeline mergeWith(Timeline timeline2) {
+		Timeline result = new Timeline();
+		result.messages = (ArrayList<Post>) this.messages.clone();
+		result.messages.addAll(timeline2.messages);
+		return result;
 	}
 }
