@@ -1,24 +1,28 @@
 package com.amarinperez.pseudotwitter;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class PseudoTwitter {
-	
-	private HashMap<String, Timeline> messages = new HashMap<String, Timeline>();
-	
+
+	private Collection<User> users = new ArrayList<User>();
+
 	public void post(String username, String message) {
-		Timeline timeline = messages.get(username);
-		if(timeline == null)
-		{
-			timeline = new Timeline();
-			messages.put(username, timeline);
+		User user = findUser(username);
+
+		if (user == null) {
+			user = new User(username);
+			users.add(user);
 		}
-		
-		timeline.add(message);
-	}
-	
-	public String getTimeline(String username) {
-		return messages.get(username).toString();
+
+		user.post(message);
 	}
 
+	public String getTimeline(String username) {
+		return findUser(username).toString();
+	}
+
+	protected User findUser(String username) {
+		return users.stream().filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
+	}
 }
