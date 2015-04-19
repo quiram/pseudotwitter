@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class PseudoTwitterTest {
@@ -44,14 +43,15 @@ public class PseudoTwitterTest {
 		String timeline = twitter.getTimeline(username);
 		assertThat(timeline, containsString(message1));
 		assertThat(timeline, containsString(message2));
+		assertThat(timeline, containsString("ago"));
 	}
 
 	@Test
 	public void usersAreNotCaseSensitive() {
-		String expectedTimeline = "A message";
-		twitter.post("Bob", expectedTimeline);
+		String message = "A message";
+		twitter.post("Bob", message);
 		String timeline = twitter.getTimeline("bob");
-		assertEquals(expectedTimeline, timeline);
+		assertThat(timeline, containsString(message));
 	}
 
 	@Test
@@ -67,5 +67,16 @@ public class PseudoTwitterTest {
 		assertThat(wall, containsString(johnMessage));
 		assertThat(wall, containsString(john));
 		assertThat(wall, containsString(charlieMessage));
+		assertThat(wall, containsString("ago"));
+	}
+	
+	@Test
+	public void wallWithoutFollowees()
+	{
+		String john = "John";
+		String johnMessage = "I am a guy";
+		twitter.post(john, johnMessage);
+		String wall = twitter.wall(john);
+		assertThat(wall, containsString(johnMessage));
 	}
 }

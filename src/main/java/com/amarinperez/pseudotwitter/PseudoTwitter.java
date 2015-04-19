@@ -17,7 +17,8 @@ public class PseudoTwitter {
 
 	public String getTimeline(String username) {
 		Predicate<Post> filterCriteria = p -> p.getUsername().equalsIgnoreCase(username);
-		String timeline = getTimelineForPostsMatching(filterCriteria, Post::getMessage);
+		Function<Post, String> mapper = p -> p.getMessage() + " (" + p.getAge() + ")";
+		String timeline = getTimelineForPostsMatching(filterCriteria, mapper);
 		return timeline;
 	}
 
@@ -37,10 +38,14 @@ public class PseudoTwitter {
 		username = username.toLowerCase();
 		Collection<String> usersToConsider = new ArrayList<String>();
 		usersToConsider.add(username);
-		usersToConsider.addAll(followees.get(username));
+		Collection<String> followeesOfThisUser = followees.get(username);
+
+		if (followeesOfThisUser != null) {
+			usersToConsider.addAll(followeesOfThisUser);
+		}
 
 		Predicate<Post> filterCriteria = p -> usersToConsider.contains(p.getUsername().toLowerCase());
-		Function<Post, String> mapper = p -> p.getUsername() + " - " + p.getMessage();
+		Function<Post, String> mapper = p -> p.getUsername() + " - " + p.getMessage() + " (" + p.getAge() + ")";
 		String wall = getTimelineForPostsMatching(filterCriteria, mapper);
 
 		return wall;

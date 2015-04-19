@@ -1,16 +1,18 @@
 package com.amarinperez.pseudotwitter;
 
+import static java.time.LocalDateTime.now;
+
+import java.time.LocalDateTime;
+
 public class Post {
 	private String message;
 	private String username;
+	private LocalDateTime timestamp;
 
 	public Post(String username, String message) {
 		this.message = message;
 		this.username = username;
-	}
-
-	public Post(String message) {
-		this(null, message);
+		timestamp = now();
 	}
 
 	public String toString() {
@@ -25,4 +27,12 @@ public class Post {
 		return message;
 	}
 
+	public LocalDateTime getTimestamp() {
+		return timestamp;
+	}
+
+	public String getAge() {
+		AgeCalculator calc = new AgeCalculator();
+		return calc.getAge(timestamp, now());
+	}
 }

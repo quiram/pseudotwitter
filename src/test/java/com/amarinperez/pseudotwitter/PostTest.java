@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 
 public class PostTest {
 	private String username;
@@ -27,5 +28,12 @@ public class PostTest {
 	public void getMessage()
 	{
 		assertEquals(message, post.getMessage());
+	}
+	
+	@Test
+	public void getTimestamp()
+	{
+		Post post2 = new Post(username, message);
+		assertThat(post.getTimestamp(), lessThan(post2.getTimestamp()));
 	}
 }
