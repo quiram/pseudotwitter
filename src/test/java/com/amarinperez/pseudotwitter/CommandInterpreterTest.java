@@ -31,6 +31,15 @@ public class CommandInterpreterTest {
 	}
 	
 	@Test
+	public void readUserCalledWall()
+	{
+		String line = "wall";
+		
+		Command command = interpreter.interpret(line);
+		assertThat(command, instanceOf(ReadCommand.class));
+	}
+	
+	@Test
 	public void producePostCommand()
 	{
 		final String username = "Bob";

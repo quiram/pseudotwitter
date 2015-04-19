@@ -18,7 +18,7 @@ public class CommandInterpreter {
 			String follower = elements[0].trim();
 			String followee = elements[1].trim();
 			return new FollowComand(twitter, follower, followee);
-		} else if (line.contains("wall")) {
+		} else if (line.contains("wall") && line.split(" ").length == 2) {
 			String username = line.split(" ")[0];
 			return new WallComand(twitter, username);
 		} else {
