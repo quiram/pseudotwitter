@@ -1,6 +1,6 @@
 package com.amarinperez.pseudotwitter;
 
-public class ReadCommand {
+public class ReadCommand implements Command {
 	private PseudoTwitter twitter;
 	private String username;
 

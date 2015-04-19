@@ -14,19 +14,22 @@ public class App {
 		while (line != null) {
 			line = line.trim();
 			
+			Command command = null;
+			
 			if(!line.contains("->"))
 			{
-				ReadCommand command = new ReadCommand(twitter, line);
-				System.out.println(command.execute());
+				command = new ReadCommand(twitter, line);
 			}
 			else
 			{
 				String[] elements = line.split("->");
 				String username = elements[0].trim();
 				String message = elements[1].trim();
-				twitter.post(username, message);
+				command = new PostCommand(twitter, username, message);
 			}
-			
+
+			System.out.println(command.execute());
+
 			line = scanner.nextLine();
 		}
 		
