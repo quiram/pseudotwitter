@@ -14,7 +14,7 @@ public class PostCommandTest {
 		String message = "this is the message";
 		Command command = new PostCommand(twitter, username, message);
 		String output = command.execute();
-		assertEquals("", output);
+		assertEquals("posted!", output);
 		verify(twitter).post(username, message);
 	}
 }

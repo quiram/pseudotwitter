@@ -13,7 +13,7 @@ public class PostCommand implements Command {
 
 	public String execute() {
 		twitter.post(username, message);
-		return "";
+		return "posted!";
 	}
 
 }
