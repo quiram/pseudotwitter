@@ -16,7 +16,8 @@ public class App {
 			
 			if(!line.contains("->"))
 			{
-				System.out.println(twitter.getTimeline(line));
+				ReadCommand command = new ReadCommand(twitter, line);
+				System.out.println(command.execute());
 			}
 			else
 			{
