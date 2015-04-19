@@ -23,6 +23,6 @@ public class PseudoTwitter {
 	}
 
 	protected User findUser(String username) {
-		return users.stream().filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
+		return users.stream().filter(u -> u.getUsername().equalsIgnoreCase(username)).findFirst().orElse(null);
 	}
 }

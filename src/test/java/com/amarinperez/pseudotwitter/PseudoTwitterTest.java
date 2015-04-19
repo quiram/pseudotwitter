@@ -46,4 +46,13 @@ public class PseudoTwitterTest {
 		assertThat(timeline, containsString(message1));
 		assertThat(timeline, containsString(message2));
 	}
+	
+	@Test
+	public void usersAreNotCaseSensitive()
+	{
+		String expectedTimeline = "A message";
+		twitter.post("Bob", expectedTimeline);
+		String timeline = twitter.getTimeline("bob");
+		assertEquals(expectedTimeline, timeline);
+	}
 }
